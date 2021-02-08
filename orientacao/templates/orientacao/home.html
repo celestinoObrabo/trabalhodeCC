@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+{% load static %}
+<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+{% block content %}
+<style>
+
+</style>
+
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/orientacao/">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">SAOD<sup>2</sup></div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="/orientacao/">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+         <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Interface
+      </div>
+        {% if user.is_staff %}
+        <li class="nav-item">
+        <a class="nav-link" href="newOrient/">
+          <i class="fas fa-fw fa-plus"></i>
+          <span>Adicionar Orientação</span></a>
+      </li>
+        <!-- Divider -->
+      <hr class="sidebar-divider">
+        {% endif %}
+
+        <li class="nav-item">
+        <a class="nav-link" href="#myModal" data-toggle="modal">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Sobre</span></a>
+      </li>
+
+         <!-- Divider -->
+      <hr class="sidebar-divider">
+
+        <li class="nav-item">
+        <a class="nav-link" href="#logoutModal" data-toggle="modal">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Sair</span></a>
+      </li>
+    </ul>
+ <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <form class="form-inline">
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+              <i class="fa fa-bars"></i>
+            </button>
+          </form>
+
+          <!-- Topbar Search -->
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <!-- Dropdown - Messages -->
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+          </ul>
+        </nav>
+
+
+<div class="container-fluid p-0" style="text-align:center;">
+    {% if user.is_staff %}
+    {% if orientacoes %}
+
+            <h4 class="h3 mb-2 text-gray-800">Listagem de Orientações</h4>
+            <p class="mb-4">Abaixo a lista de orientações disponíveis na plataforma</p>
+
+    <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Orientação</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><a href="newOrient/">Adicionar</a></div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-plus fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Earnings (Annual) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Encontros</div>
+                      <div class="h5 mb-0 font-weight-bold text-success-400" >Registre seus encontros</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-table fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tasks Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tarefas</div>
+                      <div class="row no-gutters align-items-center">
+                                <div class="h5 mb-0 font-weight-bold text-info-400">Crie suas Tarefas</div>
+                        <div class="col mr-2">
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">IFRN NA VEIA</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><a href="https://portal.ifrn.edu.br/campus/paudosferros" target="_blank">Visite nosso Portal!</a></div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-comments fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    {% endif %}
+
+{% if messages %}
+         <ul class="messages">
+             {% for message in messages %}
+                <li>
+                   {% if message.tags %} <class="alert alert-{{message.tags}}"{% endif %}>{{message}}
+                </li>
+             {% endfor %}
+         </ul>
+{% endif %}
+
+
+
+{% if orientacoes %}
+     <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Tabela de Orientações</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+            <tbody>
+                <tr>
+                    <th>Nome:</th>
+
+                    <th>Ações:</th>
+                    <th>Descrição:</th>
+                    <th>Tarefas:</th>
+                    <th>Encontros:</th>
+                </tr>
+                {% for orientacao in orientacoes %}
+                <tr>
+                    <td>{{ orientacao.name }}</td>
+
+                    <td>
+                        <ul class="navbar-nav ml-auto">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Ação
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right animated--fade-in" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="delete/{{orientacao.id}}">Deletar</a>
+                            <a class="dropdown-item" href="edit/{{orientacao.id}}">Editar</a>
+                      </li>
+                    </ul>
+                    </td>
+                    <td><a href="{{ orientacao.id }}" class="btn btn-sm btn-outline-primary">Descrição</a></td>
+                    <td><a href="/task/{{ orientacao.id }}" class="btn btn-sm btn-outline-primary">Tarefas</a></td>
+                    <td><a href="/encontros/{{ orientacao.id}}" class="btn btn-sm btn-outline-primary">Encontros</a></td>
+                </tr>
+{% endfor %}
+            </tbody>
+
+
+
+</table>
+              </div>
+            </div>
+     </div>
+    <div class="paginator">
+    <span class="step-links">
+            {% if orientacoes.has_previous %}
+                <a href="?page={{orientacoes.previous_page_number}}"><i class="fas fa-arrow-left"></i></a>
+            {% endif %}
+
+                {% if orientacoes.paginator.num_pages%}
+
+                <span class="current">
+                    {{orientacoes.number}} de {{orientacoes.paginator.num_pages}}
+                </span>
+                {% endif %}
+            {% if orientacoes.has_next %}
+                <a href="?page={{orientacoes.next_page_number}}"><i class="fas fa-arrow-right"></i></a>
+            {% endif %}
+        </span>
+        {% endif %}
+    </div>
+        {% else %}
+
+
+
+
+{% if orientacoes %}
+     <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Tabela de Orientações</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+            <tbody>
+                <tr>
+                    <th>Nome:</th>
+
+                    <th>Descrição:</th>
+                    <th>Tarefas:</th>
+
+                </tr>
+                {% for orientacao in orientacoes %}
+                <tr>
+                    <td>{{ orientacao.name }}</td>
+
+                    <td><a href="{{ orientacao.id }}" class="btn btn-sm btn-outline-primary">Descrição</a></td>
+                    <td><a href="/task/{{ orientacao.id }}" class="btn btn-sm btn-outline-primary">Tarefas</a></td>
+                </tr>
+{% endfor %}
+            </tbody>
+
+
+
+</table>
+                   </div>
+            </div>
+     </div>
+    <div class="paginator">
+    <span class="step-links">
+            {% if orientacoes.has_previous %}
+                <a href="?page={{orientacoes.previous_page_number}}"><i class="fas fa-arrow-left"></i></a>
+            {% endif %}
+
+                {% if orientacoes.paginator.num_pages%}
+
+                <span class="current">
+                    {{orientacoes.number}} de {{orientacoes.paginator.num_pages}}
+                </span>
+                {% endif %}
+            {% if orientacoes.has_next %}
+                <a href="?page={{orientacoes.next_page_number}}"><i class="fas fa-arrow-right"></i></a>
+            {% endif %}
+        </span>
+        {% endif %}
+    </div>
+{% endif %}
+</div>
+  </div>
+        {% if orientacoes %}
+        <hr>
+        <div class="container-fluid">
+        <div class="row">
+
+
+        <div class="col-lg-6">
+              <!-- Circle Buttons -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Desenvolvimento</h6>
+                </div>
+                <div class="card-body">
+                  <p>O SAOD faz uso extensivo das classes de utilitário Bootstrap 4 para evitar o inchaço do CSS e o baixo desempenho da página. </p>
+                  <p class="mb-0">Classes CSS personalizadas pelos desenvolvedores Celestino e Matheus Gurgel (alunos do IFRN) caíram de boa serventia para proporcionar ao usuário a melhor experiência possível com o uso desse sistema.</p>
+                </div>
+              </div>
+        </div>
+
+              <!-- Brand Buttons -->
+            <div class="col-lg-6">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Sistema</h6>
+                </div>
+                <div class="card-body">
+                  <div class="text-center">
+                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="https://startbootstrap.github.io/startbootstrap-sb-admin-2/img/undraw_posting_photo.svg" alt="">
+                  </div>
+                  <p>Nosso sistema é perfeito para você professor(a)/orientador(a)! do <a rel="nofollow" href="">IFRN-PDF</a>, você que precisa de um sistema fácil de usar, bonito e completo para organizar sua rotina puxada de orientações, o SAOD é a solução!</p>
+
+
+                </div>
+              </div>
+            </div>
+
+            </div>
+            {% endif %}
+
+
+
+          </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tem certeza?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Aperte em "Sair" abaixo se você deseja sair do site</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="/">Sair</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+$(document).ready(function() {
+    var deleteBtn = $('.delete-btn');
+
+    $(deleteBtn).on('click', function(e){
+
+       e.preventDefault();
+
+       var delLink = $(this).attr('href');
+       var result = confirm('Quer deletar esta Orientação?');
+
+       if(result){
+            window.location.href = delLink;
+       }
+
+    });
+});
+</script>
+         <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
+  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="js/demo/datatables-demo.js"></script>
+
+{% endblock %}

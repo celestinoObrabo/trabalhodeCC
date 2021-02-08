@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Adicione uma Tarefa{% endblock %}
+{% block nav %}
+<a class="navbar-brand js-scroll-trigger" href="#page-top">
+      <span class="d-block d-lg-none">Clarence Taylor</span>
+      <span class="d-none d-lg-block">
+        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="data:image/png;base64,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" alt="">
+      </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="/task"><i class="fas fa-home"></i>Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="newtask/"><i class="fas fa-plus"></i>Adicionar Tarefa</a>
+        </li>
+      </ul>
+    </div>
+{% endblock %}
+{% block content %}
+<div class="offset-1 col-10 list-div">
+    <h1>Adicione sua nova Tarefa:</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type='hidden' name="orientacao" value="{{ orientacao.id }}" />
+        <input type="submit" class="btn btn-success" value="Criar Tarefa">
+    </form>
+</div>
+{% endblock %}

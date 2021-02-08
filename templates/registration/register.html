@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Entrar no Sistema{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-primary">
+<div class="container">
+
+    <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+          <img src="{% static 'img/L0GO1.png' %}" height="700" width="460" alt="Chicago">
+          <div class="col-lg-7">
+            <div class="p-5">
+              <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Crie sua conta!</h1>
+              </div>
+
+                {% if messages %}
+
+             {% for message in messages %}
+                <script>
+                   alert("{{message}}");
+                </script>
+             {% endfor %}
+
+{% endif %}
+
+                <form method="post" class="user">
+            {% csrf_token %}
+				<input type="hidden" name="next" value="{{ next }}">
+
+	             {{form|crispy}}
+             <input class="btn btn-primary btn-user btn-block" type="submit" value="Registrar Conta">
+
+					</form>
+
+                <div class="text-center">
+                <a class="small" href="/">Já possui conta? Clique aqui!</a>
+              </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+</div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,400 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Lista de Tarefas {% endblock %}
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+{% block content %}
+<style>
+
+
+.fas.fa-search{
+    position:absolute;
+    top: 12px;
+    right: 26px;
+    cursor:pointer;
+}
+
+.search-div{
+    padding:0px;
+    margin-top: 15px;
+    margin-bottom:15px;
+    display:inline-block;
+}
+
+
+
+.filter-div{
+    margin-bottom:15px;
+    padding:0;
+}
+
+#filter{
+    display:inline-block;
+    width:200px;
+    margin-left:10px;
+
+}
+
+
+
+.list-div{
+    padding:0;
+}
+
+.task-list{
+    padding-left:0;
+}
+
+.task-item{
+    list-style: none;
+    font-size: 20px;
+    height: 50px;
+    padding: 0 15px;
+    padding-top:10px;
+    border-bottom: 1px dashed #ccc;
+}
+.task-item.done{
+    background-color:#CCC;
+}
+.fas.fa-trash, .fas.fa-edit, .fas.fa-check{
+    cursor:pointer;
+    margin 5px;
+    font-size:20px;
+    float:right;
+}
+
+.fas.fa-check{
+    color:#CCC;
+}
+
+.done .fas.fa-check{
+    color:#3476e2;
+}
+
+</style>
+
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/orientacao/">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">SAOD <sup>2</sup></div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="/orientacao/">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+         <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Interface
+      </div>
+        {% if user.is_staff %}
+        <li class="nav-item">
+        <a class="nav-link" href="#myModal" data-toggle="modal">
+          <i class="fas fa-fw fa-plus"></i>
+          <span>Adicionar Tarefa</span></a>
+      </li>
+        <!-- Divider -->
+      <hr class="sidebar-divider">
+{% endif %}
+        <li class="nav-item">
+        <a class="nav-link"  href="#info" data-toggle="modal">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Informações</span></a>
+      </li>
+
+         <!-- Divider -->
+      <hr class="sidebar-divider">
+
+        <li class="nav-item">
+        <a class="nav-link" href="#logoutModal" data-toggle="modal" >
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Sair</span></a>
+      </li>
+    </ul>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <form class="form-inline">
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+              <i class="fa fa-bars"></i>
+            </button>
+          </form>
+
+          <!-- Topbar Search -->
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <!-- Dropdown - Messages -->
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+          </ul>
+        </nav>
+
+
+
+<div class="container-fluid p-0" style="text-align:center;">
+
+    <h4 class="h3 mb-2 text-gray-800">Lista de Tarefas</h4>
+
+   <!-- >!-->
+    {% if messages %}
+         <ul class="messages">
+             {% for message in messages %}
+                <li
+                   {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{message}}
+                </li>
+             {% endfor %}
+         </ul>
+    {% endif %}
+    <div class="col-9 search-div">
+        <form method="GET" id="search-form">
+        <input class="form-control" type="text" id="search" name="search" placeholder="Digite o nome da tarefa para buscar" value="{{request.GET.search}}">
+        <i class="fas fa-search" id="search-btn"></i>
+        </form>
+    </div>
+    <div class="col-12 filter-div">
+        <span>Filtrar por:</span>
+        <select name="filter" id="filter" class="form-control">
+            <option value="">Escolha uma opção</option>
+            <option value="done">Tarefas concluidas</option>
+            <option value="doing">Tarefas a fazer</option>
+        </select>
+    </div>
+
+
+            <!--<a href="sendemail">EMAIL</a>!-->
+
+{% if tasks %}
+     <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Lista de Tarefas</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+            <tbody>
+                <tr>
+                    <th>Nome:</th>
+
+                    <th>Criado em:</th>
+                    <th>Painel:</th>
+                    <th>Ações:</th>
+                    <th>Status:</th>
+                </tr>
+                {% for task in tasks %}
+                <tr>
+                    <td class="text-gray-800">{{task.title}}</td>
+
+
+                    <td class="text-gray-800">{{ task.created_at }}</td>
+                    <td><a href="/task/view/{{task.id}}" class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="Acessar Tarefa">Acessar</a></td>
+                    <td>
+                        <ul class="navbar-nav ml-auto">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Ação
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right animated--fade-in" aria-labelledby="navbarDropdown">
+                            {% if user.is_staff %}
+                          <a class="dropdown-item" href="delete/{{task.id}}">Deletar</a>
+                            <a class="dropdown-item" href="edit/{{task.id}}">Editar</a>
+                            {% else %}
+                            {% if task.done == 'doing' %}
+                             <a class="dropdown-item" href="changestatus/{{task.id}}">Marcar como concluída</a>
+                             {% else %}
+                             <a class="dropdown-item" href="changestatus/{{task.id}}">Desmarcar conclusão</a>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                      </li>
+                    </ul>
+                    </td>
+                    <td>
+                        {% if task.done == 'doing' %}
+                        <p style="color:Red">Pendente</p>
+                         {% else %}
+                        <p>Entregue</p>
+                        {% endif %}
+                    </td>
+                </tr>
+{% endfor %}
+            </tbody>
+
+
+
+</table>
+              </div>
+            </div>
+     </div>
+</div>
+
+    <div class="paginator" style="text-align:center">
+        <span class="step-links">
+            {% if tasks.has_previous %}
+                <a href="?page={{tasks.previous_page_number}}"><i class="fas fa-arrow-left"></i></a>
+            {% endif %}
+
+                {% if tasks.paginator.num_pages%}
+
+                <span class="current">
+                    {{tasks.number}} de {{tasks.paginator.num_pages}}
+                </span>
+                {% endif %}
+            {% if tasks.has_next %}
+                <a href="?page={{tasks.next_page_number}}"><i class="fas fa-arrow-right"></i></a>
+            {% endif %}
+        </span>
+    </div>
+
+            </div>
+  </div></div>
+{% endif %}
+
+
+
+    <div class="modal fade" id="myModal" role="dialog" >
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="offset-1 col-10 list-div">
+    <h3>Adicione sua nova Tarefa:</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" class="btn btn-primary" value="Criar Tarefa">
+    </form>
+</div>
+        </div>
+        </div>
+  </div>
+</div>
+
+    <div class="modal fade" id="info" role="dialog" >
+  <div class="modal-dialog ">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="offset-1 col-10 list-div">
+    <h1>Infográficos:</h1>
+    <div class = "container dashboard">
+        <div class="col-4 dashboard-box" id = "dashboard-lastdays">
+            <h4>Finalizadas nos últimos 15 dias</h4>
+            <span>0</span>
+        </div>
+        <div class="col-4 dashboard-box" id = "dashboard-done">
+            <h4>Tarrefas Finalizadas</h4>
+            <span>0</span>
+        </div>
+        <div class="col-4 dashboard-box" id = "dashboard-doing">
+            <h4>Tarefas Concluídas</h4>
+            <span>0</span>
+        </div>
+    </div
+</div>
+        </div>
+        </div>
+  </div>
+</div>
+    </div>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tem certeza?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Aperte em "Sair" abaixo se você deseja sair do site</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="/">Sair</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+$(document).ready(function() {
+    {% for task in tasks %}
+    var baseUrl = 'http://localhost:8000/task/{{task.orientacao.id}}'{% endfor %};
+    var filter     = $('#filter');
+    var searchBtn = $('#search-btn');
+    var deleteBtn = $('.delete-btn');
+    var searchForm = $('#search-form');
+    $('[data-toggle="tooltip"]').tooltip();
+    $(deleteBtn).on('click', function(e){
+
+       e.preventDefault();
+
+       var delLink = $(this).attr('href');
+       var result = confirm('Quer deletar esta tarefa?');
+
+       if(result){
+            window.location.href = delLink;
+       }
+
+    });
+
+    $(searchBtn).on('click',function(){
+        searchForm.submit();
+    });
+
+    $(filter).change(function() {
+        var filter = $(this).val();
+         window.location.href = baseUrl + '?filter=' + filter;
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Lista de Tarefas {% endblock %}
+
+{% block content %}
+<style>
+
+</style>
+
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/orientacao/">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">SAOD <sup>2</sup></div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="/orientacao/">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+         <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Interface
+      </div>
+
+        <li class="nav-item">
+        <a class="nav-link" href="#myModal" data-toggle="modal">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Submeter Arquivo</span></a>
+      </li>
+
+        <!-- Divider -->
+      <hr class="sidebar-divider">
+
+        <li class="nav-item">
+        <a class="nav-link" href="#1">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Área de comentários</span></a>
+      </li>
+
+        <hr class="sidebar-divider">
+
+        <li class="nav-item">
+        <a class="nav-link" href="#2">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Arquivos submetidos</span></a>
+      </li>
+
+        <hr class="sidebar-divider">
+
+        <li class="nav-item">
+        <a class="nav-link"  href="/task/{{ task.orientacao.id }}">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Voltar</span></a>
+      </li>
+
+         <!-- Divider -->
+      <hr class="sidebar-divider">
+
+        <li class="nav-item">
+        <a class="nav-link" href="#logoutModal" data-toggle="modal">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Sair</span></a>
+      </li>
+    </ul>
+
+
+
+ <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <form class="form-inline">
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+              <i class="fa fa-bars"></i>
+            </button>
+          </form>
+
+          <!-- Topbar Search -->
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <!-- Dropdown - Messages -->
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+          </ul>
+        </nav>
+
+
+<div class="container-fluid p-0" style="text-align:center;">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-1 text-gray-800">{{task.title}}</h1>
+          <p class="mb-4 container">{{task.description}}</p>
+
+
+{% if messages %}
+         <ul class="messages">
+             {% for message in messages %}
+                <li
+                   {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{message}}
+                </li>
+             {% endfor %}
+         </ul>
+            {% endif %}
+          <!-- Content Row -->
+          <div class="row">
+{% if arquivos %}
+            <!-- Grow In Utility -->
+            <div class="col-lg-8 container" id="1">
+                <div class="card position-relative">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Área de comentários</h6>
+                </div>
+                    <div class="card-body">
+                        <form method="post">
+                        {% csrf_token %}
+                        {{ comment_form|crispy }}
+                    <input type="submit" value="Enviar Comentário" class="btn btn-outline-primary">
+                </form>
+
+
+    <div class="table-responsive">
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+            <tbody>
+                      {% for comment in comments %}
+
+                <tr>
+                    <td class="text-gray-800">{{ comment.user|capfirst }}</td>
+
+                    <td><p class="mb-4">{{ comment.content }}</p></td>
+                    <td>
+                        <ul class="navbar-nav ml-auto">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Ação
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right animated--fade-in" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="deleteComment/{{comment.id}}">Deletar</a>
+                        </div>
+                      </li>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+</table>
+    </div>
+      </div>
+                        </div>
+    </div>
+
+
+    <div class="col-lg-12 container" id="2">
+
+              <div class="card position-relative">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Arquivos submetidos</h6>
+                </div>
+                  <div class="card-body">
+
+                      <div class="table-responsive">
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+            <tbody>
+                <tr>
+                    <th>Nome:</th>
+
+                    <th>Enviado em:</th>
+                    <th>Baixar:</th>
+                    <th>Ações:</th>
+
+                </tr>
+
+                      {% for arquivo in arquivos %}
+
+                <tr>
+                    <td class="text-gray-800">{{arquivo.name}}</td>
+
+
+                    <td class="text-gray-800">{{ arquivo.created_at }}</td>
+                    <td><a href="" class="btn btn-primary" target="_blank" download="{{ arquivo.arquivo }}" data-toggle="tooltip" title="Download">{{ arquivo.arquivo }}</a></td>
+                    <td>
+                        <ul class="navbar-nav ml-auto">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Ação
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right animated--fade-in" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="deleteFile/{{arquivo.id}}">Deletar</a>
+                        </div>
+                      </li>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+</table>
+                      </div>
+                  </div>
+              </div>
+    </div>
+          </div>
+</div>
+    </div>
+          </div>
+
+    {% else %}
+      <!-- Grow In Utility -->
+            <div class="col-lg-8">
+                <div class="card position-relative">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Área de comentários</h6>
+                </div>
+                    <div class="card-body">
+                        <form method="post">
+                        {% csrf_token %}
+                        {{ comment_form|crispy }}
+                    <input type="submit" value="Enviar Comentário" class="btn btn-outline-primary">
+                </form>
+
+
+    <div class="table-responsive">
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+            <tbody>
+                      {% for comment in comments %}
+
+                <tr>
+                    <td class="text-gray-800">{{ comment.user|capfirst }}</td>
+
+                    <td><p class="mb-4">{{ comment.content }}</p></td>
+                    <td>
+                        <ul class="navbar-nav ml-auto">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Ação
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right animated--fade-in" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="deleteComment/{{comment.id}}">Deletar</a>
+                        </div>
+                      </li>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+</table>
+    </div>
+      </div>
+                        </div>
+    </div>
+
+
+    <div class="col-lg-4">
+
+              <div class="card position-relative">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Submissão de arquivos</h6>
+                </div>
+                  <div class="card-body">
+                      <p>Não há nenhum arquivo antes submetido nessa tarefa</p>
+                  </div>
+              </div>
+    </div>
+    {% endif %}
+</div>
+
+
+
+<div class="modal fade" id="myModal" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="offset-1 col-10 list-div">
+    <h1>Submeter Arquivos:</h1>
+    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ upload_form|crispy}}
+ <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+</div>
+        </div>
+        </div>
+  </div>
+</div>
+
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tem certeza?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Aperte em "Sair" abaixo se você deseja sair do site</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="/">Sair</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+$(document).ready(function() {
+    var deleteBtn = $('.delete-btn');
+    $('[data-toggle="tooltip"]').tooltip();
+    $(deleteBtn).on('click', function(e){
+
+       e.preventDefault();
+
+       var delLink = $(this).attr('href');
+       var result = confirm('Quer deletar seu comentário?');
+
+       if(result){
+            window.location.href = delLink;
+       }
+
+    });
+    var deleteBtnn = $('.delete-btnn');
+    $(deleteBtnn).on('click', function(e){
+
+       e.preventDefault();
+
+       var delLink = $(this).attr('href');
+       var result = confirm('Quer deletar este arquivo?');
+
+       if(result){
+            window.location.href = delLink;
+       }
+
+    });
+});
+
+
+
+</script>
+{% endblock %}

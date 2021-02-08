@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Entrar no Sistema{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-primary">
+    <div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div class="col-lg-6 d-none d-lg-block" style="background-position: center;
+    background-size: cover;">
+                <div id="demo" class="carousel slide" data-ride="carousel">
+
+  <!-- Indicators -->
+  <ul class="carousel-indicators">
+    <li data-target="#demo" data-slide-to="0" class="active"></li>
+    <li data-target="#demo" data-slide-to="1"></li>
+
+  </ul>
+
+  <!-- The slideshow -->
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-gwgWWHPIiStQFXuPZKuCzgxpZ-Gqxc_88g&usqp=CAU" height="600" width="500" alt="Los Angeles">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'img/L0GO2.jpg' %}" height="600" width="400" alt="Chicago">
+    </div>
+
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+
+</div>
+                  </div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Entrar no Sistema!</h1>
+                  </div>
+
+
+                <form method="post" class="user">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                    {{form|crispy}}
+                    <button type="submit" class="btn btn-primary btn-user btn-block">Entrar</button>
+
+                </form>
+                    <div class="text-center">
+                    <a class="small" href="/register">Crie sua conta!</a>
+                  </div>
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+{% endblock %}
